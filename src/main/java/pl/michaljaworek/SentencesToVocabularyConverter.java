@@ -28,7 +28,7 @@ public class SentencesToVocabularyConverter {
 	public Map<String, List<String>> convertSentencesToVocabulary(List<String> sentences) {
 		Map<String, List<String>> map = new HashMap<>();
 		for (String sentence : sentences) {
-			String withoutIntepuncion = sentence.replaceAll("[^a-zA-z -']", "");
+			String withoutIntepuncion = sentence.replaceAll("[^a-zA-z \\-’']", "");
 			String[] words = withoutIntepuncion.split(" ");
 			for (String word : words) {
 				if (isNoneEmpty(word) //

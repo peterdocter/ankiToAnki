@@ -1,11 +1,10 @@
 package pl.michaljaworek;
 
-import static java.util.Comparator.comparing;
+import static java.util.stream.IntStream.range;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Function;
 
 public class VocabularyPrinter {
 
@@ -18,22 +17,24 @@ public class VocabularyPrinter {
 
 	public String printVocabulary(boolean withExamples) {
 		StringBuilder result = new StringBuilder();
+		int i = 1;
+		for (Entry<String, List<String>> entry : vocabularyFromSentences.entrySet()) {
+			// result.append((i++) + ". " + entry.getKey() + "\n");
+			result.append(entry.getKey() + "\n");
+			if (withExamples) {
+				List<String> sentences = entry.getValue();
+				range(0, sentences.size())//
+						.forEach(sentenceId -> result
+								.append("\t" + (sentenceId + 1) + ". " + sentences.get(sentenceId) + "\n"));
+			}
+		}
+
 		vocabularyFromSentences.entrySet()//
 				.stream()//
-				.sorted(comparing(numberOfSentences()).reversed())//
-				.limit(10)//
 				.forEach(entry -> {
-					result.append(entry.getKey() + "\n");
-					if (withExamples) {
-						entry.getValue()//
-								.forEach(sentence -> result.append("\t" + sentence + "\n"));
-					}
+
 				});
 		return result.toString();
-	}
-
-	private static Function<? super Entry<String, List<String>>, ? extends Integer> numberOfSentences() {
-		return entry -> entry.getValue().size();
 	}
 
 }
