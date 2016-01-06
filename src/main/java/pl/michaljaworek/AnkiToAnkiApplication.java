@@ -76,12 +76,10 @@ public class AnkiToAnkiApplication {
 			Map<String, List<String>> vocabularyFromSentences = new SentencesToVocabularyConverter(listOfKnowsWords)
 					.convertSentencesToVocabulary(sentences);
 
-			out.println("Text: " + inputFile.getName());
+			String textTitle = inputFile.getName();
+			out.println("Text: " + textTitle);
 
-			out.println(format("This book has %d unique words.", vocabularyFromSentences.size()));
-			out.println(format("You know %d of them which is %.2f%%. (including easy words)", //
-					listOfKnowsWords.size(), //
-					100.0f * listOfKnowsWords.size() / vocabularyFromSentences.size()));
+			out.println(format("This book has %d unique unknown words.", vocabularyFromSentences.size()));
 
 			long numberOfNotFullyUnderstanbableSentences = vocabularyFromSentences//
 					.values()//
@@ -119,10 +117,10 @@ public class AnkiToAnkiApplication {
 			if (!arguments.containsOption("dontCreateAnkiFile")) {
 				String fileName = "newAnkis.txt";
 				new AnkiFileCreator(limitedWords)//
-						.saveAnkiToDisc(fileName);
+						.saveAnkiToDisc(fileName, textTitle);
 
-				out.println(format("\n I have created file named %s with examples ready to import into anki. \n",
-						fileName));
+				out.println(
+						format("\nI have created file named %s with examples ready to import into anki. \n", fileName));
 			}
 			if (!arguments.containsOption("dontShowExamples")) {
 				out.println("Below you can review sentences for these words.");

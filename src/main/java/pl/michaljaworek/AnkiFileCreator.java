@@ -19,12 +19,13 @@ public class AnkiFileCreator {
 		this.wordsWithExamples = wordsWithExamples;
 	}
 
-	public void saveAnkiToDisc(String fileName) throws Exception {
-		PrintWriter writer = new PrintWriter(new File(fileName));
+	public void saveAnkiToDisc(String outputFileName, String inputFilename) throws Exception {
+		String filenameWithoutExtention = inputFilename.split("[.]")[0];
+		PrintWriter writer = new PrintWriter(new File(outputFileName));
 		for (Entry<String, List<String>> entry : this.wordsWithExamples.entrySet()) {
 			String word = entry.getKey();
 			String example = findBestExample(entry.getValue());
-			String ankiEntry = buildAnkiString(word, example);
+			String ankiEntry = buildAnkiString(word, example, filenameWithoutExtention);
 			writer.println(ankiEntry);
 		}
 		writer.close();
@@ -46,7 +47,7 @@ public class AnkiFileCreator {
 		return string.split(" ").length + 1;
 	}
 
-	private String buildAnkiString(String word, String example) {
+	private String buildAnkiString(String word, String example, String textTitle) {
 		StringBuilder result = new StringBuilder();
 		result.append(word);
 		result.append(SEPARATOR);
@@ -57,6 +58,8 @@ public class AnkiFileCreator {
 		result.append(masked(word, styleExample));
 		result.append(SEPARATOR);
 		result.append(styleExample);
+		result.append(SEPARATOR);
+		result.append(textTitle);
 		return result.toString();
 	}
 
