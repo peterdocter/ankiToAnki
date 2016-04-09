@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class SentencesToVocabularyConverter {
 
 	private List<String> wordsToBeSkipped;
@@ -31,9 +33,7 @@ public class SentencesToVocabularyConverter {
 			String withoutIntepuncion = sentence.replaceAll("[^a-zA-z \\-’']", "");
 			String[] words = withoutIntepuncion.split(" ");
 			for (String word : words) {
-				if (isNoneEmpty(word) //
-						&& //
-						!wordsToBeSkipped.contains(word.toLowerCase())) {
+				if (wordShouldBeIncluded(word)) {
 					String key = word.toLowerCase();
 					List<String> list = map.get(key);
 					if (list == null) {
@@ -45,6 +45,16 @@ public class SentencesToVocabularyConverter {
 			}
 		}
 		return map;
+	}
+
+	private boolean wordShouldBeIncluded(String word) {
+		return isNoneEmpty(word) //
+				&& //
+				constainsOnlyLetters(word) && !wordsToBeSkipped.contains(word.toLowerCase());
+	}
+
+	private boolean constainsOnlyLetters(String word) {
+		return StringUtils.isAlpha(word);
 	}
 
 }

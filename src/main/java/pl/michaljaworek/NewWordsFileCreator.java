@@ -3,30 +3,40 @@ package pl.michaljaworek;
 import static java.util.Comparator.comparing;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class AnkiFileCreator {
+public class NewWordsFileCreator {
 
 	private static final String CASE_INSITIVE_INDICATOR = "(?i)";
 	private static final int OPTIMUM_NUMBER_OF_WORDS = 5;
 	private static final Object SEPARATOR = "\t";
 	private Map<String, List<String>> wordsWithExamples;
 
-	public AnkiFileCreator(Map<String, List<String>> wordsWithExamples) {
+	public NewWordsFileCreator(Map<String, List<String>> wordsWithExamples) {
 		this.wordsWithExamples = wordsWithExamples;
 	}
 
 	public void saveAnkiToDisc(String outputFileName, String inputFilename) throws Exception {
+		saveToDiscUsingSingleWordTextCreator(outputFileName, inputFilename, this::buildAnkiString);
+	}
+
+	public void saveLwtToDisc(String outputFileName, String inputFilename) throws Exception {
+		saveToDiscUsingSingleWordTextCreator(outputFileName, inputFilename, this::buildLwtString);
+	}
+
+	private void saveToDiscUsingSingleWordTextCreator(String outputFileName, String inputFilename,
+			SingleWordTextCreator singleWordCreator) throws FileNotFoundException {
 		String filenameWithoutExtention = inputFilename.split("[.]")[0];
 		PrintWriter writer = new PrintWriter(new File(outputFileName));
 		for (Entry<String, List<String>> entry : this.wordsWithExamples.entrySet()) {
 			String word = entry.getKey();
 			String example = findBestExample(entry.getValue());
-			String ankiEntry = buildAnkiString(word, example, filenameWithoutExtention);
-			writer.println(ankiEntry);
+			String singleLine = singleWordCreator.buildSingleWordText(word, example, filenameWithoutExtention);
+			writer.println(singleLine);
 		}
 		writer.close();
 	}
@@ -45,6 +55,14 @@ public class AnkiFileCreator {
 
 	private int numberOfWords(String string) {
 		return string.split(" ").length + 1;
+	}
+
+	interface SingleWordTextCreator {
+		String buildSingleWordText(String word, String example, String textTitle);
+	}
+
+	private String buildLwtString(String word, String example, String textTitle) {
+		return example;
 	}
 
 	private String buildAnkiString(String word, String example, String textTitle) {

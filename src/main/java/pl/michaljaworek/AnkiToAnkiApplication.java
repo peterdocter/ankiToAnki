@@ -5,6 +5,7 @@ import static java.lang.System.out;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toMap;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.io.FileUtils.readFileToString;
 
 import java.io.File;
 import java.util.Collection;
@@ -16,7 +17,6 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.io.FileUtils;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -62,9 +62,9 @@ public class AnkiToAnkiApplication {
 			out.println("Let me think...");
 
 			String filePath = arguments.getNonOptionArgs().get(0);
-			System.out.println(filePath);
+			out.println(filePath);
 			File inputFile = new File(filePath);
-			String fullText = FileUtils.readFileToString(inputFile);
+			String fullText = readFileToString(inputFile);
 
 			List<String> sentences = new LongTextSplitter()//
 					.splitIntoSentences(fullText);
@@ -116,12 +116,22 @@ public class AnkiToAnkiApplication {
 
 			if (!arguments.containsOption("dontCreateAnkiFile")) {
 				String fileName = "newAnkis.txt";
-				new AnkiFileCreator(limitedWords)//
+				new NewWordsFileCreator(limitedWords)//
 						.saveAnkiToDisc(fileName, textTitle);
 
 				out.println(
 						format("\nI have created file named %s with examples ready to import into anki. \n", fileName));
 			}
+
+			if (!arguments.containsOption("dontCreateLwtFile")) {
+				String fileName = "toLwt.txt";
+				new NewWordsFileCreator(limitedWords)//
+						.saveLwtToDisc(fileName, textTitle);
+
+				out.println(
+						format("\nI have created file named %s with sentence to be copy-paste to LWT. \n", fileName));
+			}
+
 			if (!arguments.containsOption("dontShowExamples")) {
 				out.println("Below you can review sentences for these words.");
 				out.println(//

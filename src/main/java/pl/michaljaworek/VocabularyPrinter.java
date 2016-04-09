@@ -17,7 +17,6 @@ public class VocabularyPrinter {
 
 	public String printVocabulary(boolean withExamples) {
 		StringBuilder result = new StringBuilder();
-		int i = 1;
 		for (Entry<String, List<String>> entry : vocabularyFromSentences.entrySet()) {
 			// result.append((i++) + ". " + entry.getKey() + "\n");
 			result.append(entry.getKey() + "\n");
