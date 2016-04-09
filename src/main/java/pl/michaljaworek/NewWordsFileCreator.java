@@ -62,7 +62,7 @@ public class NewWordsFileCreator {
 	}
 
 	private String buildLwtString(String word, String example, String textTitle) {
-		return example;
+		return word + ": " + example;
 	}
 
 	private String buildAnkiString(String word, String example, String textTitle) {

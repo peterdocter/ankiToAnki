@@ -35,7 +35,7 @@ public class AnkiToAnkiApplication {
 	 *            arg[0] path/to/file/in/foreign/language.txt (required, no
 	 *            default)
 	 * 
-	 *            --dontShowExamples - do not print example sencentes
+	 *            --showExamples - do not print example sencentes
 	 * 
 	 *            --dontCreateAnkiFile - do not create anki file
 	 * 
@@ -132,7 +132,7 @@ public class AnkiToAnkiApplication {
 						format("\nI have created file named %s with sentence to be copy-paste to LWT. \n", fileName));
 			}
 
-			if (!arguments.containsOption("dontShowExamples")) {
+			if (arguments.containsOption("showExamples")) {
 				out.println("Below you can review sentences for these words.");
 				out.println(//
 						new VocabularyPrinter(limitedWords)//
@@ -149,7 +149,7 @@ public class AnkiToAnkiApplication {
 
 	private static void printHelp() {
 		out.println(
-				"Correct invocation: ./ankiToAnki fileInForeignLanguage.txt [--limit=LIMIT] [--dontShowExamples] [--dontCreateAnkiFile]");
+				"Correct invocation: ./ankiToAnki fileInForeignLanguage.txt [--limit=LIMIT] [--showExamples] [--dontCreateAnkiFile]");
 	}
 
 	private static Function<Entry<String, List<String>>, Integer> numberOfSentences() {

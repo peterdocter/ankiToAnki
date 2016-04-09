@@ -5,6 +5,9 @@ import static java.util.stream.IntStream.range;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 
 public class VocabularyPrinter {
 
@@ -19,7 +22,8 @@ public class VocabularyPrinter {
 		StringBuilder result = new StringBuilder();
 		for (Entry<String, List<String>> entry : vocabularyFromSentences.entrySet()) {
 			// result.append((i++) + ". " + entry.getKey() + "\n");
-			result.append(entry.getKey() + "\n");
+			result.append(entry.getKey() + " (");
+			result.append(occurences(entry) + " occurences)\n");
 			if (withExamples) {
 				List<String> sentences = entry.getValue();
 				range(0, sentences.size())//
@@ -34,6 +38,13 @@ public class VocabularyPrinter {
 
 				});
 		return result.toString();
+	}
+
+	private int occurences(Entry<String, List<String>> entry) {
+		String word = entry.getKey();
+		return entry.getValue().stream()//
+				.map(sentence -> StringUtils.countMatches(sentence.toLowerCase(), word.toLowerCase()))//
+				.collect(Collectors.summingInt(Integer::valueOf));
 	}
 
 }
