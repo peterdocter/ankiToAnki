@@ -17,7 +17,7 @@ public class LongTextSplitter {
 	}
 
 	private String removeUnnesesaryWhiteChars(String input) {
-		return input.replaceAll("[ \\t\\n]{1,}", " ");
+		return input.replaceAll("[ \\t\\n\\r]{1,}", " ");
 	}
 
 	public List<String> splitIntoSentences(String fullText) {
